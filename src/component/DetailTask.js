@@ -102,7 +102,7 @@ export default class DetailTask extends Component {
 
       }else {
         this.setState({priorityChoose:3,
-          selected:moment().format('DD-MM-YYYY'),
+          selected:moment().format('YYYY-MM-DD'),
           //isDatePickerVisible: false,
           time:'',
           title:'',})
@@ -133,7 +133,7 @@ export default class DetailTask extends Component {
       }else{
         reactotron.log({DetailTaskDatat:'new'})
         this.setState({priorityChoose:3,
-          selected:moment().format('DD-MM-YYYY'),
+          selected:moment().format('YYYY-MM-DD'),
           time:'',
           title:'',
           isEdit:false})

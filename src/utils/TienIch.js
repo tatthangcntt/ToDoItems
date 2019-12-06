@@ -5,7 +5,7 @@ import {
 import {
     AsyncStorage
 } from 'react-native'
-import I18n from 'react-native-i18n';
+// import I18n from 'react-native-i18n';
 
 export default class TienIch {
 
@@ -94,41 +94,7 @@ export default class TienIch {
         var result = number.split('.').join("").split(',').join("");
         return result;
     };
-    static formatDayWeek(monthType,result) {
-        var dateNow = new Date();
-        var month = dateNow.getMonth();
-        var day = dateNow.getDate();
-        var year = dateNow.getFullYear();
-        var FebNumberOfDays ="";
-        var monthChange = monthType;
-        if(monthType-12>=0){
-            monthChange =  monthType-12;
-            year = year + 1;
-        }
-        var dayChange = monthChange == month?day:1;
-        //Determing if February (28,or 29)  
-        if (monthChange == 1){
-            if ( (year%100!=0) && (year%4==0) || (year%400==0)){
-              FebNumberOfDays = 29;
-            }else{
-              FebNumberOfDays = 28;
-            }
-        }
-        var monthNames = ['01','02','03','04','05','06','07','08','09','10','11','12'];
-        var dayPerMonth = [31,FebNumberOfDays,31,30,31,30,31,31,30,31,30,31];
-        var dayNames = [I18n.t('chu_nhat'),I18n.t('thu_2'),I18n.t('thu_3'),I18n.t('thu_4'),I18n.t('thu_5'),I18n.t('thu_6'),I18n.t('thu_7')];
-        for (let index = dayChange; index <= dayPerMonth[monthChange]; index++) {
-            var day = index<10?"0"+index:index;
-            var object = {};
-            object.day = index;
-            object.month = monthChange+1;
-            object.year = year;
-            object.dayOfWeek = dayNames[new Date(""+year+'-'+monthNames[monthChange]+'-'+day+"").getDay()];
-            object.dayMonthYear = day+'-'+monthNames[monthChange]+'-'+year;
-            result.push(object);
-        }
-        return result;
-    }
+   
     static displayCalendar(){
         var dateNow = new Date();
         var month = dateNow.getMonth();

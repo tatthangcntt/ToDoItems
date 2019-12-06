@@ -62,11 +62,11 @@ export default class ItemTask extends Component {
     compareTime(data){
       const currentTime = moment();
       const deadLine = moment(`${data.date_done_task} ${data.time_done_task}`,"YYYY-MM-DD HH:mm");
-      reactotron.log({compareTime:currentTime.diff(deadLine, 'minutes'), currentTime, deadLine})
+      // reactotron.log({compareTime:currentTime.diff(deadLine, 'minutes'), currentTime, deadLine})
       return currentTime.diff(deadLine, 'minutes');
     }
     componentWillUnmount(){
-      reactotron.log("componentWillUnmount")
+      // reactotron.log("componentWillUnmount")
       clearInterval(this.interval)
   
   }
@@ -108,7 +108,6 @@ export default class ItemTask extends Component {
                 <Text allowFontScaling={false}  numberOfLines={1} ellipsizeMode={'tail'} 
                 style={[styles.sTitle,{fontSize:verticalScale(12),color: this.state.isPassed?'darkgray':'orange'}]}>
                   { data.date_done_task + `  `+ data.time_done_task +` `} {this.state.isPassed?'Passed':'Near'}
-                
                 </Text>
                 
                 <TouchableOpacity onPress={()=>{this.props.onRemoveItem(data)}}>

@@ -16,7 +16,7 @@ const AppContainer = createAppContainer(WellComeRoot);
 
 import thunk from "redux-thunk";
 import { createLogger } from 'redux-logger';
-import {I18n} from './src/language/i18n'
+// import {I18n} from './src/language/i18n'
 import {
     reduxifyNavigator,
     createReactNavigationReduxMiddleware,
@@ -45,8 +45,8 @@ class App extends Component {
     async componentWillMount() {
       // const language = await Base.BoNhoRieng.layDuLieu('LANGUAGE', 'ja');
       // Base.LANGUAGE = language;
-      I18n.locale = 'vi';
-      Reactotron.log({language:language})
+    //   I18n.locale = 'vi';
+    //   Reactotron.log({language:language})
     }
     componentDidMount() {
         Reactotron.log("componentDidMount")
@@ -60,7 +60,7 @@ class App extends Component {
     };
     componentWillUnmount = () => {
 
-        this.notificationOpenedListener();
+        // this.notificationOpenedListener();
     };
 
     shownotifi = (smg) => {
@@ -147,7 +147,7 @@ class App extends Component {
                     title,
                     body,
                     [
-                        { text: I18n.t('dong'), onPress: () => console.log('OK Pressed') },
+                        { text: 'ok', onPress: () => console.log('OK Pressed') },
                     ],
                     { cancelable: false }
                 )

@@ -1,13 +1,12 @@
 'use strict';
 
-import React, { Component } from 'react';
-import {View, Text,StyleSheet, StatusBar, Image,Dimensions,TouchableOpacity,SafeAreaView, TextInput } from "react-native";
+import React, { Component,useState,useEffect } from 'react';
+import {View, Text,StyleSheet, StatusBar, Image,Dimensions,TouchableOpacity,SafeAreaView, TextInput,ScrollView } from "react-native";
 // import SplashScreen from 'react-native-splash-screen';
 import { scale, moderateScale, verticalScale } from "../utils/Scale";
 import LinearGradient from 'react-native-linear-gradient';
-import I18n from '../language/i18n'
 import BoNhoRieng from '../utils/BoNhoRieng';
-import { ScrollView } from 'react-native-gesture-handler';
+// import { ScrollView } from 'react-native-gesture-handler';
 import ItemTask from '../component/ItemTask';
 import ActionButton from 'react-native-action-button';
 import Modal from 'react-native-modalbox';
@@ -24,6 +23,10 @@ import {
     renderers
   } from 'react-native-popup-menu';
 import TienIch from '../utils/TienIch';
+import auth from '@react-native-firebase/auth';
+import database from '@react-native-firebase/database';
+import firebase from '@react-native-firebase/app';
+   const  KEY_SAVE_LIST_ITEM = 'KEY_SAVE_LIST_ITEM';
   const { Popover } = renderers
   const STATUS_BAR_HEIGHT = (Platform.OS === 'ios' ? 20 : StatusBar.currentHeight)
   const DEVICE_WIDTH = Dimensions.get('window').width
@@ -34,26 +37,51 @@ class WelcomeScreen extends Component {
         this.state = {
             language: "en",
             filterId:3,
-            listItems: [...listItems],
+            listItems: [],
             openMenu:false,
             dataEdit:undefined,
             isEdit:false
         };
+        
+    }
+
+   
+    async onSignIn() {
+        
+        // const ref = database().ref(`/users/ThangntDB`);
+        // ref(`/users/ThangntDB`).on('value', onRoleChange);
+        // reactotron.log( {userData:ref});
+        // ref.once('value', onSnapshot);
+        // const snapshot = await database().ref('/');
+        // reactotron.log({exist:snapshot.exists()});
+       
+        // Fetch the data snapshot
+        // const snapshot = await ref.once('value');
+        // reactotron.log( {userData:snapshot.val()});
+      }
+    async getData(){
+        try {
+            const datas = await BoNhoRieng.layDuLieu(KEY_SAVE_LIST_ITEM,undefined);
+            if(datas){
+                this.setState({listItems: JSON.parse(datas)});
+            }
+        } catch (error) {
+            this.setState({listItems: []});
+        }
+      
     }
     componentWillMount = () => {
-        // setTimeout(() => {
-        //     SplashScreen.hide();
-        // },1000);
-        // this.setState({language:BoNhoRieng.layDuLieu("language","vi")});
-        // I18n.locale = this.state.language;
-        this.state.listItems = this.state.listItems.sort((a, b)=>{
-            return (b.priority.level - a.priority.level);
-          });
-        
+        reactotron.log( {componentWillMount:'signin'});
+        this.getData();
+        // this.state.listItems = this.state.listItems.sort((a, b)=>{
+        //     return (b.priority.level - a.priority.level);
+        // });
     };
     onPressRemoveTask(item){
         AlertCustom.AlertOptionConfirm('Alert', 'Are you sure?','cancle','ok',()=>{},()=>{
-            this.setState({listItems:this.state.listItems.filter(i => i !== item)});
+            this.state.listItems = this.state.listItems.filter(i => i !== item)
+            this.setState({listItems:this.state.listItems});
+            this.saveData();
         })
     }
     renderItemTask=(item, index) =>{
@@ -84,10 +112,10 @@ class WelcomeScreen extends Component {
         }
         reactotron.log({listItems:this.state.listItems})
         this.setState({listItems:this.state.listItems})
+        this.saveData()
     }
     updateTask(item){
         this.detailTask.close();
-       
         this.state.listItems = this.state.listItems.map(obj =>{
             if(obj.id == item.id)
             {
@@ -98,6 +126,7 @@ class WelcomeScreen extends Component {
         })
         reactotron.log({listItems:this.state.listItems})
         this.setState({listItems:this.state.listItems})
+        this.saveData()
     }
     onPressFilterHight(){
         this.state.listItems = this.state.listItems.sort((a, b)=>{
@@ -113,6 +142,16 @@ class WelcomeScreen extends Component {
             return (a.priority.level - b.priority.level);
           });
         this.setState({filterId:1,listItems:this.state.listItems, openMenu:false})
+    }
+
+    saveData(){
+        BoNhoRieng.luuDuLieu(KEY_SAVE_LIST_ITEM,JSON.stringify(this.state.listItems)).then().catch(
+            (error)=>{ 
+                setTimeout(() => {
+                    BoNhoRieng.luuDuLieu(KEY_SAVE_LIST_ITEM,JSON.stringify(this.state.listItems))
+                }, 200);
+            }
+        )
     }
     renderMenu(){
         return(
@@ -306,14 +345,14 @@ const styles = StyleSheet.create({
     },
 });
 const listItems = [
-    {
-        id: 1,
-        title: 'task1',
-        content: 'Làm việc chăm chỉ đi ',
-        priority: { level: 3, name: 'hight' },
-        date_done_task: '2019-12-6',
-        time_done_task: '19:00',
-    }
+    // {
+    //     id: 1,
+    //     title: 'task1',
+    //     content: 'Làm việc chăm chỉ đi ',
+    //     priority: { level: 3, name: 'hight' },
+    //     date_done_task: '2019-12-6',
+    //     time_done_task: '19:00',
+    // }
     // ,
     // {
     //     id: 2,
