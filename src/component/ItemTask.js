@@ -113,7 +113,7 @@ export default class ItemTask extends Component {
                 <TouchableOpacity onPress={()=>{this.props.onRemoveItem(data)}}>
                   <Image 
                   source={require('../resources/image/icon_trash.png')}
-                  style={[styles.sIcon,{tintColor:'darkgray', marginRight:verticalScale(0)}]}></Image>
+                  style={[styles.sIconTrash,{tintColor:'darkgray', marginRight:verticalScale(0)}]}></Image>
                 </TouchableOpacity>
               </View>
             </TouchableOpacity>
@@ -126,6 +126,12 @@ const styles = StyleSheet.create({
       marginRight: verticalScale(5),
       width: verticalScale(10),
       height: verticalScale(10),
+      resizeMode:'contain',
+    },
+    sIconTrash:{
+      marginRight: verticalScale(5),
+      width: verticalScale(22),
+      height: verticalScale(22),
       resizeMode:'contain',
     },
     sIcon:{
