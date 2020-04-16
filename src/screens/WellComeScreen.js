@@ -24,8 +24,8 @@ import {
   } from 'react-native-popup-menu';
 import TienIch from '../utils/TienIch';
 import auth from '@react-native-firebase/auth';
-import database from '@react-native-firebase/database';
-import firebase from '@react-native-firebase/app';
+// import database from '@react-native-firebase/database';
+import { firebase } from '@react-native-firebase/database';
    const  KEY_SAVE_LIST_ITEM = 'KEY_SAVE_LIST_ITEM';
   const { Popover } = renderers
   const STATUS_BAR_HEIGHT = (Platform.OS === 'ios' ? 20 : StatusBar.currentHeight)
@@ -46,18 +46,28 @@ class WelcomeScreen extends Component {
     }
 
    
-    async onSignIn() {
-        
-        // const ref = database().ref(`/users/ThangntDB`);
-        // ref(`/users/ThangntDB`).on('value', onRoleChange);
-        // reactotron.log( {userData:ref});
-        // ref.once('value', onSnapshot);
-        // const snapshot = await database().ref('/');
-        // reactotron.log({exist:snapshot.exists()});
-       
-        // Fetch the data snapshot
-        // const snapshot = await ref.once('value');
-        // reactotron.log( {userData:snapshot.val()});
+    async realtimeData() {
+        var obj = {
+                id: 1,
+                title: 'task1',
+                content: 'Làm việc chăm chỉ đi ',
+                priority: { level: 3, name: 'hight' },
+                date_done_task: '2019-12-6',
+                time_done_task: '19:00',
+            }
+        // await firebase.database().goOnline();
+        reactotron.log({rootRef:firebase.database().ref('').once('value')})
+
+        const rootRef = await firebase.database().ref('dsad').once('value');
+        reactotron.log({rootRef:rootRef})
+        // rootRef.set(obj).then((data)=>{
+        //     //success callback
+        //     reactotron.log({'data ':data})
+        // }).catch((error)=>{
+        //     //error callback
+        //     reactotron.log({'error ':error})
+        // })
+      
       }
     async getData(){
         try {
@@ -72,6 +82,7 @@ class WelcomeScreen extends Component {
     }
     componentWillMount = () => {
         reactotron.log( {componentWillMount:'signin'});
+        this.realtimeData();
         this.getData();
         // this.state.listItems = this.state.listItems.sort((a, b)=>{
         //     return (b.priority.level - a.priority.level);
